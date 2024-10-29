@@ -42,7 +42,7 @@ css = '''
 bot_template = '''
 <div class="chat-message bot">
 <div class="avatar">
-<img src="images/robot.jpg">
+<img src="/home/jampanasasank/Documents/GenAI/Generative-AI/multiple_pdf_chat/images/robot.jpg">
 </div>
 <div class="message">{{MSG}}</div>
 </div>
@@ -53,7 +53,7 @@ bot_template = '''
 user_template = '''
 <div class="chat-message user">
 <div class="avatar">
-<img src="images/human.png">
+<img src="/home/jampanasasank/Documents/GenAI/Generative-AI/multiple_pdf_chat/images/human.png">
 </div>
 <div class="message">{{MSG}}</div>
 </div>
