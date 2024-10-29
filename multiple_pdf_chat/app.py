@@ -3,25 +3,39 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import HuggingFaceInstructEmbeddings
-from langchain.vectorstores import FAISS
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import conversational_retrieval
 import pdfplumber
+from  langchain_pinecone import PineconeVectorStore
 
 
 def get_conversation_chain(vectorstore, model, request):
-    context =  vectorstore.get_context(request)
-    question = f"Answer the following question {request}. with respect to the context: {context}"
+    """Create a conversational chain using a vector store and generative model."""
+    if not request:
+        return "Please provide a question."
+    
+    # Search for similar chunks in vectorstore
+    context_results = vectorstore.similarity_search(request, k=3)  # Find 3 most similar chunks
+    context = " ".join([doc.page_content for doc in context_results])
+    
+    # Generate the response based on the context
+    question = f"Answer the following question: '{request}' with respect to the context: {context}"
     response = model.generate_content(question)
     return response
 
-def get_vectorstore(chunks):
-    #define the embedding model as well as the vector store
-    embeddings = HuggingFaceInstructEmbeddings(model_name='hkunlp/instructor-large')
-    vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
-    return vectorstore
+# def get_vectorstore(chunks):
+#     #define the embedding model as well as the vector store
+#     # embeddings = HuggingFaceInstructEmbeddings(model_name='hkunlp/instructor-large')
+#     # embeddings = HuggingFaceEmbeddings(model='hkunlp/instructor-large')
+#     vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
+#     return vectorstore
+'''
+vector store: can use pinecone
+setting up the session and history
+conversational chain
 
+
+'''
 
 def extract_from_pdf(pdfs):
     text = ""
@@ -63,14 +77,14 @@ def main(model):
                 
                 text_chunks =  split_text(raw_text)
                 
-                vectorstore  = get_vectorstore(text_chunks)
+                # vectorstore  = get_vectorstore(text_chunks)
                 
-                conversation = get_conversation_chain(vectorstore, model, request)
+                # response = get_conversation_chain(vectorstore, model, request)
                 
                 
         
     
-    return conversation
+    return response
     
 
 if __name__=='__main__':
