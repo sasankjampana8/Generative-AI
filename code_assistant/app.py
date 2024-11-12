@@ -1,6 +1,7 @@
 import streamlit as st 
 import os 
 from crewai import Agent, Task, tools, Process
+import langgraph
 
 system_prompt = '''
 
@@ -23,6 +24,14 @@ Return only the final Python code
 '''
 agent 1: to generate the code for the question
 agent 2: to run and debug the code.
+
+input:  question
+
+input url (documentation), videos, blogs, articles, github repo etc. 
+
+output: code
+
+
 
 
 '''
