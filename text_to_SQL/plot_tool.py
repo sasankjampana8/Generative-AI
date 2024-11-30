@@ -3,10 +3,6 @@ import os
 import numpy as np
 import pandas as pd
 
-
-
-
-
 def main():
     '''
     After extracting data from the DB, this function will be used to create a plot of the data (if necessary).
